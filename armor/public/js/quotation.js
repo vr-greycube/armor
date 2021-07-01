@@ -37,10 +37,10 @@ frappe.ui.form.on('Quotation', {
       const row = locals[cdt][cdn];
       if (frm.doc.item_group_cf) {
         return {
-          query: "armor.api.get_item_group_items",
-          filters: {
-            'item_group': frm.doc.item_group_cf,
-            "is_sales_item": 1
+          query: "armor.api.item_query",
+					filters: {
+            'armour_item_group': frm.doc.item_group_cf,
+            'is_sales_item': 1
           }
         }
       }
