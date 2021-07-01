@@ -4,6 +4,11 @@ import frappe
 # from erpnext.setup.doctype.item_group.item_group import get_child_groups
 from frappe.desk.reportview import get_match_cond, get_filters_cond
 from frappe.utils import nowdate, getdate
+from erpnext.stock.get_item_details import get_conversion_factor
+from frappe.model.mapper import get_mapped_doc
+from frappe.utils import get_link_to_form
+from frappe import _
+
 
 
 @frappe.whitelist()
@@ -111,3 +116,42 @@ def get_child_groups(item_group_name):
 	return frappe.db.sql("""select name
 		from `tabItem Group` where lft>=%(lft)s and rgt<=%(rgt)s
 			""", {"lft": item_group.lft, "rgt": item_group.rgt})				
+
+@frappe.whitelist()
+def make_stock_entry_from_sales_invoice(self,method):
+	source_name=self.name
+	target_doc=None
+	def set_missing_values(source, target):
+		target.stock_entry_type='Material Issue'
+		target.purpose = 'Material Issue'
+
+		for consumed_material in source.consumed_materials:
+			product_bundle = frappe.get_doc('Product Bundle',consumed_material.product_bundle_item_code)
+			for item in product_bundle.items:
+				conversion_factor=get_conversion_factor(item.item_code,item.uom).get("conversion_factor", 1)
+				qty=(item.qty)*(consumed_material.qty)
+				target.append('items',{
+				'item_code':item.item_code,
+				'qty':qty,
+				'conversion_factor' : conversion_factor	,	
+				'transfer_qty' : qty * conversion_factor,
+				'uom':item.uom,
+				's_warehouse':consumed_material.warehouse
+				})
+
+		target.run_method("calculate_rate_and_amount")
+		target.set_stock_entry_type()
+
+
+	doclist = get_mapped_doc("Sales Invoice", source_name, {
+		"Sales Invoice": {
+			"doctype": "Stock Entry",
+			"validation": {
+				"docstatus": ["=", 1]
+			}
+		}
+	}, target_doc, set_missing_values,ignore_permissions=True)
+
+	doclist.save(ignore_permissions=True)
+	frappe.msgprint(_("Stock Entry {0} is created from sales invoice {1} .".format(get_link_to_form('Stock Entry',doclist.name),frappe.bold(source_name))))
+	return 				
