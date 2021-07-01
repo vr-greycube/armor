@@ -24,7 +24,7 @@ frappe.ui.form.on('Quotation', {
       else if(frm.doc.apply_discount_on=='Net Total'){
         erpnext_percentage=flt((frm.doc.discount_amount/(frm.doc.discount_amount+frm.doc.base_net_total))*100,1)
       }
-      if (erpnext_percentage>= flt(frm.doc.max_discount_allowed_cf)) {
+      if (erpnext_percentage> flt(frm.doc.max_discount_allowed_cf)) {
         frappe.throw(__({
           message: __('Maximum discount allowed is <b>{0}%</b>. Discount given is <b>{1}%</b>. Please correct it.',[frm.doc.max_discount_allowed_cf,erpnext_percentage]),
           title: __('Max discount allowed percentage has exceeded.'),
