@@ -57,18 +57,25 @@ def get_data():
 			]
 		},
 		{
-            "label":_("Lead Setup"),
+			"label": _("Package Setup"),
+			"icon": "fa fa-list",
+			"items": [
+				{
+                    "type":"doctype",
+                    "label":"Package",
+                    "name":"Package CT"
+				},
+                             
+			]
+		},        
+		{
+            "label":_("Quotation Setup"),
             "items":[
                 {
                     "type":"doctype",
                     "label":"Sales Partner",
                     "name":"Sales Partner"
                 },              
-                {
-                    "type":"doctype",
-                    "label":"Lead Source",
-                    "name":"Lead Source"
-                },
                 {
                     "type":"doctype",
                     "label":"Customer Group",

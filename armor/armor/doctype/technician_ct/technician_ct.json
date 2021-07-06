@@ -1,35 +1,33 @@
 {
- "creation": "2021-06-29 13:58:46.330901",
+ "creation": "2021-07-05 15:47:03.928454",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "car_model",
-  "car_size"
+  "technician_id",
+  "technician_name"
  ],
  "fields": [
   {
-   "fieldname": "car_model",
+   "fieldname": "technician_id",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Model",
-   "options": "Car Model CT",
-   "reqd": 1
+   "label": "Technician ID",
+   "options": "Employee"
   },
   {
-   "fieldname": "car_size",
-   "fieldtype": "Link",
+   "fetch_from": "technician_id.employee_name",
+   "fieldname": "technician_name",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Size",
-   "options": "Car Size CT",
-   "reqd": 1
+   "label": "Technician Name"
   }
  ],
  "istable": 1,
- "modified": "2021-07-05 14:46:15.934416",
+ "modified": "2021-07-05 15:48:29.037247",
  "modified_by": "Administrator",
  "module": "Armor",
- "name": "Car Group Model CT",
+ "name": "Technician CT",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,

@@ -95,21 +95,6 @@ def item_query(doctype, txt, searchfield, start, page_len, filters, as_dict=Fals
 			}, as_dict=as_dict)
 
 
-# @frappe.whitelist()
-# @frappe.validate_and_sanitize_search_inputs
-# def get_item_group_items(doctype, txt, searchfield, start, page_len, filters):
-# 	print('get_item_group_items'*100)
-# 	if filters and filters.get('item_group'):
-# 		item_group=filters.get('item_group')
-# 		child_groups = ", ".join(['"' + i[0] + '"' for i in get_child_groups(item_group)])
-# 		print('item_group',item_group)
-# 		print('--'*100,child_groups)
-# 		if child_groups:
-# 			return frappe.db.sql("""select item_name,description,item_group,customer_code from `tabItem`
-# 				where docstatus = 0 
-# 				and is_sales_item=1
-# 				and (item_group in (%s)) """ % (child_groups))
-
 
 def get_child_groups(item_group_name):
 	item_group = frappe.get_doc("Item Group", item_group_name)
@@ -117,41 +102,41 @@ def get_child_groups(item_group_name):
 		from `tabItem Group` where lft>=%(lft)s and rgt<=%(rgt)s
 			""", {"lft": item_group.lft, "rgt": item_group.rgt})				
 
-@frappe.whitelist()
-def make_stock_entry_from_sales_invoice(self,method):
-	source_name=self.name
-	target_doc=None
-	def set_missing_values(source, target):
-		target.stock_entry_type='Material Issue'
-		target.purpose = 'Material Issue'
+# @frappe.whitelist()
+# def make_stock_entry_from_sales_invoice(self,method):
+# 	source_name=self.name
+# 	target_doc=None
+# 	def set_missing_values(source, target):
+# 		target.stock_entry_type='Material Issue'
+# 		target.purpose = 'Material Issue'
 
-		for consumed_material in source.consumed_materials:
-			product_bundle = frappe.get_doc('Product Bundle',consumed_material.product_bundle_item_code)
-			for item in product_bundle.items:
-				conversion_factor=get_conversion_factor(item.item_code,item.uom).get("conversion_factor", 1)
-				qty=(item.qty)*(consumed_material.qty)
-				target.append('items',{
-				'item_code':item.item_code,
-				'qty':qty,
-				'conversion_factor' : conversion_factor	,	
-				'transfer_qty' : qty * conversion_factor,
-				'uom':item.uom,
-				's_warehouse':consumed_material.warehouse
-				})
+# 		for consumed_material in source.consumed_materials:
+# 			product_bundle = frappe.get_doc('Product Bundle',consumed_material.product_bundle_item_code)
+# 			for item in product_bundle.items:
+# 				conversion_factor=get_conversion_factor(item.item_code,item.uom).get("conversion_factor", 1)
+# 				qty=(item.qty)*(consumed_material.qty)
+# 				target.append('items',{
+# 				'item_code':item.item_code,
+# 				'qty':qty,
+# 				'conversion_factor' : conversion_factor	,	
+# 				'transfer_qty' : qty * conversion_factor,
+# 				'uom':item.uom,
+# 				's_warehouse':consumed_material.warehouse
+# 				})
 
-		target.run_method("calculate_rate_and_amount")
-		target.set_stock_entry_type()
+# 		target.run_method("calculate_rate_and_amount")
+# 		target.set_stock_entry_type()
 
 
-	doclist = get_mapped_doc("Sales Invoice", source_name, {
-		"Sales Invoice": {
-			"doctype": "Stock Entry",
-			"validation": {
-				"docstatus": ["=", 1]
-			}
-		}
-	}, target_doc, set_missing_values,ignore_permissions=True)
+# 	doclist = get_mapped_doc("Sales Invoice", source_name, {
+# 		"Sales Invoice": {
+# 			"doctype": "Stock Entry",
+# 			"validation": {
+# 				"docstatus": ["=", 1]
+# 			}
+# 		}
+# 	}, target_doc, set_missing_values,ignore_permissions=True)
 
-	doclist.save(ignore_permissions=True)
-	frappe.msgprint(_("Stock Entry {0} is created from sales invoice {1} .".format(get_link_to_form('Stock Entry',doclist.name),frappe.bold(source_name))))
-	return 				
+# 	doclist.save(ignore_permissions=True)
+# 	frappe.msgprint(_("Stock Entry {0} is created from sales invoice {1} .".format(get_link_to_form('Stock Entry',doclist.name),frappe.bold(source_name))))
+# 	return 				

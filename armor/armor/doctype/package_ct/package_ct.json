@@ -1,0 +1,69 @@
+{
+ "autoname": "field:package_name",
+ "creation": "2021-07-05 14:12:25.735085",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "package_name",
+  "column_break_2",
+  "package_amount",
+  "package_items_section",
+  "package_items"
+ ],
+ "fields": [
+  {
+   "fieldname": "package_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Package Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "package_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Package Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "package_items_section",
+   "fieldtype": "Section Break",
+   "label": "Package Items"
+  },
+  {
+   "description": "Please make sure total of package item percent is 100%",
+   "fieldname": "package_items",
+   "fieldtype": "Table",
+   "options": "Package Item CT",
+   "reqd": 1
+  }
+ ],
+ "modified": "2021-07-05 14:24:44.914312",
+ "modified_by": "Administrator",
+ "module": "Armor",
+ "name": "Package CT",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
