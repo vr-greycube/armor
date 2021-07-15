@@ -1,17 +1,25 @@
 frappe.ui.form.on('Lead', {
-  email_id:function (frm) {
-    if (frm.doc.email_id==undefined || frm.doc.email_id=='') {
-      frappe.throw({message:__("Email id is mandatory."),title:__("Email id is missing." )})
-    }   
-  },
+  // email_id:function (frm) {
+  //   if (frm.doc.email_id==undefined || frm.doc.email_id=='') {
+  //     frappe.throw({message:__("Email id is mandatory."),title:__("Email id is missing." )})
+  //   }   
+  // },
   refresh:function (frm) {
-    frm.set_df_property('email_id', 'reqd', 1)
+    // frm.set_df_property('email_id', 'reqd', 1)
+    debugger
+		if(!frm.doc.__islocal && frm.doc.__onload && !frm.doc.__onload.is_customer) {
+			frm.add_custom_button(__("Sales Order"), function () {
+        create_sales_order(frm)
+      }
+      , __('Create'));
+		}    
   },
-  validate:function (frm) {
-    if (frm.doc.email_id==undefined || frm.doc.email_id=='') {
-      frappe.throw({message:__("Email id is mandatory."),title:__("Email id is missing." )})
-    }
-  }
+  // validate:function (frm) {
+  //   if (frm.doc.email_id==undefined || frm.doc.email_id=='') {
+  //     frappe.throw({message:__("Email id is mandatory."),title:__("Email id is missing." )})
+  //   }
+  // }
+
 //   source: function (frm) {
 //     if (frm.doc.source) {
 //       let sales_partners = []
@@ -46,3 +54,13 @@ frappe.ui.form.on('Lead', {
 //     }
 //   }
 });
+
+function  create_sales_order(frm) {
+  if (frm.doc.email_id==undefined || frm.doc.email_id=='') {
+    frappe.throw({message:__("Email id is mandatory for Sales Order Creation."),title:__("Email id is missing." )})
+  }    
+  frappe.model.open_mapped_doc({
+    method: "armor.api.create_sales_order_and_customer",
+    frm: cur_frm
+  })
+} 

@@ -140,3 +140,43 @@ def get_child_groups(item_group_name):
 # 	doclist.save(ignore_permissions=True)
 # 	frappe.msgprint(_("Stock Entry {0} is created from sales invoice {1} .".format(get_link_to_form('Stock Entry',doclist.name),frappe.bold(source_name))))
 # 	return 				
+
+@frappe.whitelist()
+def create_sales_order_and_customer(source_name, target_doc=None,ignore_permissions=True):
+	customer=_make_customer(source_name, target_doc,ignore_permissions)
+	frappe.msgprint(_("Customer {0} is created.").format(customer), alert=True)
+	def set_missing_values(source, target):
+		target.customer=customer
+		target.order_type='Sales'
+
+	doclist = get_mapped_doc("Lead", source_name, {
+		"Lead": {
+			"doctype": "Sales Order",
+		}}, target_doc, set_missing_values, ignore_permissions=ignore_permissions)
+
+	return doclist
+
+
+def _make_customer(source_name, target_doc=None, ignore_permissions=False):
+	def set_missing_values(source, target):
+		if source.company_name:
+			target.customer_type = "Company"
+			target.customer_name = source.company_name
+		else:
+			target.customer_type = "Individual"
+			target.customer_name = source.lead_name
+		target.phone_number_cf=source.phone
+		target.customer_group = frappe.db.get_default("Customer Group")
+
+	doclist = get_mapped_doc("Lead", source_name,
+		{"Lead": {
+			"doctype": "Customer",
+			"field_map": {
+				"name": "lead_name",
+				"company_name": "customer_name",
+			"contact_no": "phone_1",
+				"fax": "fax_1"
+			}
+		}}, target_doc, set_missing_values, ignore_permissions=ignore_permissions)
+	doclist.save()
+	return doclist.name	
