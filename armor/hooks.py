@@ -16,7 +16,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/armor/css/armor.css"
-# app_include_js =  "/assets/armor/js/lead_quick_entry.js"
+app_include_js =  "/assets/armor/js/customer_quick_entry.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/armor/css/armor.css"
@@ -31,6 +31,7 @@ doctype_js = {
   "Quotation":"public/js/quotation.js",
   "Sales Order":"public/js/sales_order.js",
   "Sales Invoice":"public/js/sales_invoice.js",
+  "Delivery Note":"public/js/delivery_note.js",
   "Customer Group":"public/js/customer_group.js"
   }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
