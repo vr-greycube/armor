@@ -40,7 +40,7 @@ frappe.ui.form.on(cur_frm.doctype, {
         for (let index = 0; index < package_items.length; index++) {
           let row = cur_frm.fields_dict.items.grid.add_new_row(),docname = row.name;
           cur_frm.cached_items[docname] = {
-            rate: (package_items[index].item_percent) * (100 / package_amount),
+            rate: ((package_items[index].item_percent) / (package_amount))*100,
           };
           frappe.model.set_value(cur_frm.doctype + " Item", docname, "item_code", package_items[index].item_code);
         }

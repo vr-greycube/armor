@@ -11,13 +11,13 @@ frappe.ui.form.on(cur_frm.doctype, {
       filter_source_based_on_customer(frm)
     }    
   },
-  validate:function (frm) {
-		for (let row of (frm.doc.items || [])) {
-      if (row.prevdoc_docname==undefined || row.prevdoc_docname=='') {
-        frappe.throw({message:__("Quotation refrenece is missing for row <b>{0}</b>.",[row.idx]),title:__("Quotation reference is missing." )})
-      }
-		}    
-  }
+  // validate:function (frm) {
+	// 	for (let row of (frm.doc.items || [])) {
+  //     if (row.prevdoc_docname==undefined || row.prevdoc_docname=='') {
+  //       frappe.throw({message:__("Quotation refrenece is missing for row <b>{0}</b>.",[row.idx]),title:__("Quotation reference is missing." )})
+  //     }
+	// 	}    
+  // }
 })
 function filter_source_based_on_customer(frm){
   frappe.db.get_value('Customer', frm.doc.customer, 'customer_group')

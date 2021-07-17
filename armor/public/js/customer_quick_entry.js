@@ -1,14 +1,12 @@
 frappe.provide('frappe.ui.form');
 
 frappe.ui.form.CustomerQuickEntryForm = frappe.ui.form.QuickEntryForm.extend({
-	init: function(doctype, after_insert) {
-		this.skip_redirect_on_error = true;
-		this._super(doctype, after_insert);
-	},
 
 	render_dialog: function() {
-		this.mandatory = this.mandatory.concat(this.get_variant_fields());
 		this._super();
+		console.log(this.dialog.fields[0])
+		// let lead_source_field = dialog.get_field("source");
+		// lead_source_field.df.onchange
 	},
 
 	get_variant_fields: function() {
