@@ -16,7 +16,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/armor/css/armor.css"
-app_include_js =  "/assets/armor/js/customer_quick_entry.js"
+app_include_js =  ["/assets/armor/js/customer_quick_entry.js","/assets/armor/js/markerjs2.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/armor/css/armor.css"
