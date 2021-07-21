@@ -1,6 +1,24 @@
 {% include 'armor/public/js/sales_armor_common.js' %}
 
+var weekday = new Array(7);
+weekday[0] = "لأحَد";
+weekday[1] = "لإثنين";
+weekday[2] = "لثلاثاء";
+weekday[3] = "لأربعاء";
+weekday[4] = "لخميس";
+weekday[5] = "لجمعة";
+weekday[6] = "لسبت";
+
+
 frappe.ui.form.on(cur_frm.doctype, {
+  delivery_date: function (frm) {
+    if (frm.doc.delivery_date) {
+      let delivery_date=frm.doc.delivery_date
+      var n = weekday[frappe.datetime.user_to_obj(delivery_date).getDay()];
+      frm.set_value('delivery_day_cf', n)
+      
+    }
+  },
   onload: function (frm) {
     if (frm.doc.customer) {
       filter_source_based_on_customer(frm)
