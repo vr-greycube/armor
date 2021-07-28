@@ -10,24 +10,29 @@ def get_data():
             "items":[
                 {
                     "type":"doctype",
-                    "label":"Lead",
+                    "label":_("Lead"),
                     "name":"Lead"
                 },              
                 {
                     "type":"doctype",
-                    "label":"Quotation",
+                    "label":_("Quotation"),
                     "name":"Quotation"
                 },
                 {
                     "type":"doctype",
-                    "label":"Sales Order",
+                    "label":_("Sales Order"),
                     "name":"Sales Order"
                 },
                 {
                     "type":"doctype",
-                    "label":"Sales Invoice",
+                    "label":_("Sales Invoice"),
                     "name":"Sales Invoice"
-                }                                  
+                },
+                {
+                    "type":"doctype",
+                    "label":_("Delivery Note"),
+                    "name":"Delivery Note"
+                }                                                   
             ]
 		},         
 		{
@@ -36,22 +41,22 @@ def get_data():
 			"items": [
 				{
                     "type":"doctype",
-                    "label":"Car Size",
+                    "label":_("Car Size"),
                     "name":"Car Size CT"
 				},
 				{
                     "type":"doctype",
-                    "label":"Car Production Year",
+                    "label":_("Car Production Year"),
                     "name":"Car Production Year CT"
 				},
 				{
                     "type":"doctype",
-                    "label":"Car Model",
+                    "label":_("Car Model"),
                     "name":"Car Model CT"
 				},
 				{
                     "type":"doctype",
-                    "label":"Car Group",
+                    "label":_("Car Group"),
                     "name":"Car Group CT"
 				}                                
 			]
@@ -62,7 +67,7 @@ def get_data():
 			"items": [
 				{
                     "type":"doctype",
-                    "label":"Package",
+                    "label":_("Package"),
                     "name":"Package CT"
 				},
                              
@@ -73,12 +78,12 @@ def get_data():
             "items":[
                 {
                     "type":"doctype",
-                    "label":"Sales Partner",
+                    "label":_("Sales Partner"),
                     "name":"Sales Partner"
                 },              
                 {
                     "type":"doctype",
-                    "label":"Customer Group",
+                    "label":_("Customer Group"),
                     "name":"Customer Group"
                 }                
             ]
