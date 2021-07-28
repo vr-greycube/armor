@@ -83,6 +83,13 @@ frappe.ui.form.on(cur_frm.doctype, {
         }
       }
     });
+    frm.set_query("technician_id", "technician_cf", ()=> {
+        return {
+          filters: {
+            is_technician_cf: 1
+          }
+        }
+    });    
   }
 })
 
