@@ -31,6 +31,9 @@ function setSourceImage(source) {
 
 function showMarkerArea(target) {
   const markerArea = new markerjs2.MarkerArea(sourceImage);
+    markerArea.renderImageType = 'image/jpeg';
+    markerArea.renderImageQuality = 0.2;
+
   // since the container div is set to position: relative it is now our positioning root
   // end we have to let marker.js know that
   markerArea.targetRoot = targetRoot;
@@ -38,6 +41,9 @@ function showMarkerArea(target) {
     target.src = imgURL;
     // save the state of MarkerArea
     cur_frm.doc.car_structure_annotation=JSON.stringify(state)
+   
+    cur_frm.set_value('annotated_car_image_cf', imgURL)
+    cur_frm.save()
   });
   markerArea.show();
   // if previous state is present - restore it
