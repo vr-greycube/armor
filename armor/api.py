@@ -184,3 +184,23 @@ def _make_customer(source_name, target_doc=None, ignore_permissions=False):
 		}}, target_doc, set_missing_values, ignore_permissions=ignore_permissions)
 	doclist.save()
 	return doclist.name	
+
+
+def update_car_information_in_sales_order(self,method):
+	sales_order_name=None
+	if self.items:
+		for item in self.items:
+			if item.against_sales_order:
+				sales_order_name=item.against_sales_order	
+				if sales_order_name:
+					break
+	print('sales_order_name'*100,sales_order_name)
+	if sales_order_name:
+		sales_order=frappe.get_doc('Sales Order',sales_order_name)
+		for delivery_cars in self.cars:
+			for so_cars in sales_order.cars:
+				if delivery_cars.model == so_cars.model:
+					frappe.db.set_value('Car Information CT', so_cars.name, 'color', delivery_cars.color)
+					frappe.db.set_value('Car Information CT', so_cars.name, 'km', delivery_cars.km)
+					frappe.db.set_value('Car Information CT', so_cars.name, 'plate_no', delivery_cars.plate_no)
+					break

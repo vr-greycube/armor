@@ -16,15 +16,35 @@ frappe.ui.form.on(cur_frm.doctype, {
   },
   validate: function (frm) {
     if (frm.doc.max_discount_allowed_cf && frm.doc.max_discount_allowed_cf > 0) {
-      let erpnext_percentage
-      if (frm.doc.apply_discount_on == 'Grand Total') {
-        erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_grand_total)) * 100, 1)
-      } else if (frm.doc.apply_discount_on == 'Net Total') {
-        erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_net_total)) * 100, 1)
-      }
-      if (erpnext_percentage > flt(frm.doc.max_discount_allowed_cf)) {
+      // cal sum_of_item_level_discount,sum_of_price_list_rate
+      let items=frm.doc.items
+      let sum_of_item_level_discount=0
+      let sum_of_price_list_rate=0
+      for (let index = 0; index < items.length; index++) {
+        sum_of_item_level_discount=items[index].discount_amount+sum_of_item_level_discount
+        sum_of_price_list_rate=items[index].price_list_rate+sum_of_price_list_rate
+      } 
+
+      //  cal sum_of_base_tax_amount
+      let taxes=frm.doc.taxes
+      let sum_of_base_tax_amount=0
+      for (let index = 0; index < taxes.length; index++) {
+        if (taxes[index].included_in_print_rate==1) {
+          sum_of_base_tax_amount=taxes[index].base_tax_amount+sum_of_base_tax_amount
+        }
+      }     
+
+
+      let actual_percentage=
+      flt(((sum_of_item_level_discount+frm.doc.discount_amount)/(sum_of_price_list_rate-sum_of_item_level_discount-frm.doc.discount_amount-sum_of_base_tax_amount))*100,1)
+      // if (frm.doc.apply_discount_on == 'Grand Total') {
+      //   erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_grand_total)) * 100, 1)
+      // } else if (frm.doc.apply_discount_on == 'Net Total') {
+        // erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_net_total)) * 100, 1)
+      // }
+      if (actual_percentage > flt(frm.doc.max_discount_allowed_cf)) {
         frappe.throw(__({
-          message: __('Maximum discount allowed is <b>{0}%</b>. Discount given is <b>{1}%</b>. Please correct it.', [frm.doc.max_discount_allowed_cf, erpnext_percentage]),
+          message: __('Maximum discount allowed is <b>{0}%</b>. Discount given is <b>{1}%</b>. Please correct it.', [frm.doc.max_discount_allowed_cf, actual_percentage]),
           title: __('Max discount allowed percentage has exceeded.'),
         }))
       }
@@ -39,7 +59,6 @@ frappe.ui.form.on(cur_frm.doctype, {
         let package_items = doc.package_items
         for (let index = 0; index < package_items.length; index++) {
           let row = cur_frm.fields_dict.items.grid.add_new_row(),docname = row.name;
-          console.log(((package_items[index].item_percent) /100)*package_amount,index)
           cur_frm.cached_items[docname] = {
             rate: ((package_items[index].item_percent) /100)*package_amount,
           };

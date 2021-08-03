@@ -7,7 +7,11 @@
   "group",
   "model",
   "size",
-  "year"
+  "year",
+  "column_break_5",
+  "color",
+  "km",
+  "plate_no"
  ],
  "fields": [
   {
@@ -40,10 +44,32 @@
    "in_list_view": 1,
    "label": "Size",
    "width": "2"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Color"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "km",
+   "fieldtype": "Int",
+   "label": "KM"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "plate_no",
+   "fieldtype": "Data",
+   "label": "Plate No"
   }
  ],
  "istable": 1,
- "modified": "2021-07-05 14:39:00.080451",
+ "modified": "2021-08-03 14:55:21.553827",
  "modified_by": "Administrator",
  "module": "Armor",
  "name": "Car Information CT",

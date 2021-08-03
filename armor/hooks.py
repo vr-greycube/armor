@@ -86,11 +86,11 @@ doctype_js = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"Sales Invoice": {
-# 		"on_submit": "armor.api.make_stock_entry_from_sales_invoice",
-# 	}
-# }
+doc_events = {
+	"Delivery Note": {
+		"validate": "armor.api.update_car_information_in_sales_order",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
