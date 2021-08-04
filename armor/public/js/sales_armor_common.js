@@ -21,8 +21,8 @@ frappe.ui.form.on(cur_frm.doctype, {
       let sum_of_item_level_discount=0
       let sum_of_price_list_rate=0
       for (let index = 0; index < items.length; index++) {
-        sum_of_item_level_discount=items[index].discount_amount+sum_of_item_level_discount
-        sum_of_price_list_rate=items[index].price_list_rate+sum_of_price_list_rate
+        sum_of_item_level_discount=(items[index].discount_amount * items[index].qty)+sum_of_item_level_discount
+        sum_of_price_list_rate=(items[index].price_list_rate * items[index].qty) +sum_of_price_list_rate
       } 
 
       //  cal sum_of_base_tax_amount
@@ -36,7 +36,7 @@ frappe.ui.form.on(cur_frm.doctype, {
 
 
       let actual_percentage=
-      flt(((sum_of_item_level_discount+frm.doc.discount_amount)/(sum_of_price_list_rate-sum_of_item_level_discount-frm.doc.discount_amount-sum_of_base_tax_amount))*100,1)
+      flt(((sum_of_item_level_discount+frm.doc.discount_amount)/(sum_of_price_list_rate-sum_of_base_tax_amount))*100,1)
       // if (frm.doc.apply_discount_on == 'Grand Total') {
       //   erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_grand_total)) * 100, 1)
       // } else if (frm.doc.apply_discount_on == 'Net Total') {
