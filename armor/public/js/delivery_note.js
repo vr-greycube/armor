@@ -18,9 +18,9 @@ frappe.ui.form.on("Delivery Note", {
   },
 	onload_post_render: function(frm) {
     $(frm.fields_dict['car_structure_html'].wrapper)
-    .html('<div  class="bg-white px-5 md:px-11 py-16 rounded shadow-lg flex justify-center max-w-screen-lg"> \
-    <img  id="sourceImage"   src="/assets/armor/image/car_structure.svg" style="max-width: 900px; max-height: 80%;"  crossorigin="anonymous" /> \
-    <img  id="sampleImage"   src="/assets/armor/image/car_structure.svg"  style="max-width: 900px; max-height: 100%; position: absolute;" crossorigin="anonymous" /> \
+    .html('<div  style="position: relative; display: flex;flex-direction: column;align-items: center;justify-content: center;padding-top: 50px;"> \
+    <img  id="sourceImage"   src="/assets/armor/image/car_structure.png" style="max-width: 900px; max-height: 80%;"  crossorigin="anonymous" /> \
+    <img  id="sampleImage"   src="/assets/armor/image/car_structure.png"  style="max-width: 900px; max-height: 100%; position: absolute;" crossorigin="anonymous" /> \
     </div>');
 
     setSourceImage(document.getElementById("sourceImage"));
@@ -39,8 +39,8 @@ function setSourceImage(source) {
 
 function showMarkerArea(target) {
   const markerArea = new markerjs2.MarkerArea(sourceImage);
+    markerArea.renderImageQuality = 0.5;
     markerArea.renderImageType = 'image/jpeg';
-    markerArea.renderImageQuality = 0.2;
 
   // since the container div is set to position: relative it is now our positioning root
   // end we have to let marker.js know that
