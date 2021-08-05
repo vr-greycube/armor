@@ -71,11 +71,11 @@
    "fieldname": "plate_no",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Plate No"
+   "label": "Plate#"
   }
  ],
  "istable": 1,
- "modified": "2021-08-05 06:47:52.111559",
+ "modified": "2021-08-05 07:48:57.981004",
  "modified_by": "Administrator",
  "module": "Armor",
  "name": "DN Car Information CT",
