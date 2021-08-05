@@ -1,5 +1,7 @@
 {% include 'armor/public/js/sales_armor_common.js' %}
 
+
+
 var weekday = new Array(7);
 weekday[0] = "الاحد"; 
 weekday[1] = "الاثنين";
@@ -24,6 +26,20 @@ frappe.ui.form.on(cur_frm.doctype, {
       filter_source_based_on_customer(frm)
     }    
   },
+  onload_post_render(frm) {
+		if(frm.doc.__islocal && !(frm.doc.taxes || []).length
+			&& !(frm.doc.__onload ? frm.doc.__onload.load_after_mapping : false)) {
+			frappe.after_ajax(() => frm.cscript.apply_default_taxes());
+		} 
+    else if(frm.doc.__islocal && frm.doc.company && frm.doc["items"]
+			&& !frm.doc.is_pos) {
+			frappe.after_ajax(() => frm.cscript.calculate_taxes_and_totals());
+		}
+		if(frappe.meta.get_docfield(frm.doc.doctype + " Item", "item_code")) {
+			frm.cscript.setup_item_selector();
+			frm.get_field("items").grid.set_multiple_add("item_code", "qty");
+		}
+	},
   customer: function (frm) {
     if (frm.doc.customer) {
       filter_source_based_on_customer(frm)

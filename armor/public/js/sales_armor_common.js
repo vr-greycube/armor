@@ -15,7 +15,7 @@ frappe.ui.form.on(cur_frm.doctype, {
       })
   },
   validate: function (frm) {
-    if (frm.doc.max_discount_allowed_cf && frm.doc.max_discount_allowed_cf > 0) {
+    if (frm.doc.max_discount_allowed_cf && frm.doc.max_discount_allowed_cf > 0 && (frm.doc.package_cf==undefined || frm.doc.package_cf=='')) {
       // cal sum_of_item_level_discount,sum_of_price_list_rate
       let items=frm.doc.items
       let sum_of_item_level_discount=0
@@ -33,21 +33,28 @@ frappe.ui.form.on(cur_frm.doctype, {
           sum_of_base_tax_amount=taxes[index].base_tax_amount+sum_of_base_tax_amount
         }
       }     
-
-
       let actual_percentage=
       flt(((sum_of_item_level_discount+frm.doc.discount_amount)/(sum_of_price_list_rate-sum_of_base_tax_amount))*100,1)
-      // if (frm.doc.apply_discount_on == 'Grand Total') {
-      //   erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_grand_total)) * 100, 1)
-      // } else if (frm.doc.apply_discount_on == 'Net Total') {
-        // erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_net_total)) * 100, 1)
-      // }
       if (actual_percentage > flt(frm.doc.max_discount_allowed_cf)) {
         frappe.throw(__({
           message: __('Maximum discount allowed is <b>{0}%</b>. Discount given is <b>{1}%</b>. Please correct it.', [frm.doc.max_discount_allowed_cf, actual_percentage]),
           title: __('Max discount allowed percentage has exceeded.'),
         }))
       }
+    }
+    else if(frm.doc.max_discount_allowed_cf && frm.doc.max_discount_allowed_cf > 0 && frm.doc.package_cf){
+      let erpnext_percentage=0
+      if (frm.doc.apply_discount_on == 'Grand Total') {
+        erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_grand_total)) * 100, 1)
+      } else if (frm.doc.apply_discount_on == 'Net Total') {
+        erpnext_percentage = flt((frm.doc.discount_amount / (frm.doc.discount_amount + frm.doc.base_net_total)) * 100, 1)
+      }
+      if (erpnext_percentage > flt(frm.doc.max_discount_allowed_cf)) {
+        frappe.throw(__({
+          message: __('Maximum discount allowed is <b>{0}%</b>. Discount given is <b>{1}%</b>. Please correct it.', [frm.doc.max_discount_allowed_cf, erpnext_percentage]),
+          title: __('Max discount allowed percentage has exceeded.'),
+        }))
+      } 
     }
   },
   package_cf: function (frm) {
