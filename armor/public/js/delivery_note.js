@@ -5,17 +5,17 @@ var targetRoot;
 var maState;
 
 frappe.ui.form.on("Delivery Note", {
-  refresh: function (frm) {
-    if (frm.doc.doctype=='Delivery Note') {
-      let color_df = frappe.meta.get_docfield("Car Information CT","color", frm.doc.name);
-      let km_df = frappe.meta.get_docfield("Car Information CT","km", frm.doc.name);
-      let plate_no_df = frappe.meta.get_docfield("Car Information CT","plate_no", frm.doc.name);
+  // refresh: function (frm) {
+  //   if (frm.doc.doctype=='Delivery Note') {
+  //     let color_df = frappe.meta.get_docfield("Car Information CT","color", frm.doc.name);
+  //     let km_df = frappe.meta.get_docfield("Car Information CT","km", frm.doc.name);
+  //     let plate_no_df = frappe.meta.get_docfield("Car Information CT","plate_no", frm.doc.name);
 
-      color_df.reqd = 1;      
-      km_df.reqd = 1;   
-      plate_no_df.reqd = 1;   
-    }
-  },
+  //     color_df.reqd = 1;      
+  //     km_df.reqd = 1;   
+  //     plate_no_df.reqd = 1;   
+  //   }
+  // },
 	onload_post_render: function(frm) {
     $(frm.fields_dict['car_structure_html'].wrapper)
     .html('<div  style="position: relative; display: flex;flex-direction: column;align-items: center;justify-content: center;padding-top: 50px;"> \
