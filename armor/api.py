@@ -149,6 +149,7 @@ def create_sales_order_and_customer(source_name, target_doc=None,ignore_permissi
 		target.customer=customer
 		target.order_type='Sales'
 		if source.guest_group_cf:
+			target.customer_group=source.guest_group_cf
 			max_discount_allowed_cf=frappe.db.get_value('Customer Group', source.guest_group_cf, 'max_discount_allowed_cf')
 			if max_discount_allowed_cf:
 				target.max_discount_allowed_cf=max_discount_allowed_cf

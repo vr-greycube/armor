@@ -24,12 +24,14 @@ frappe.ui.form.on(cur_frm.doctype, {
   onload: function (frm) {
     if (frm.doc.customer) {
       filter_source_based_on_customer(frm)
+      make_sales_partner_mandatory_based_on_is_agency(frm)
     }    
   },
   onload_post_render(frm) {
 		if(frm.doc.__islocal && !(frm.doc.taxes || []).length
 			&& !(frm.doc.__onload ? frm.doc.__onload.load_after_mapping : false)) {
 			frappe.after_ajax(() => frm.cscript.apply_default_taxes());
+      
 		} 
     else if(frm.doc.__islocal && frm.doc.company && frm.doc["items"]
 			&& !frm.doc.is_pos) {
@@ -46,30 +48,7 @@ frappe.ui.form.on(cur_frm.doctype, {
     }    
   },
   customer_group: function(frm){
- if (frm.doc.customer_group ) {
-        let sales_partners = []
-      let customer_group_value = frm.doc.customer_group
-      frappe.db.get_doc('Customer Group', customer_group_value)
-        .then(doc => {
-          if (doc.customer_group_source == 'Is Agency') {
-            $.each(doc.sales_partners_cf, function (index, source_row) {
-              sales_partners.push(source_row.sales_partner)
-            });
-            frm.set_query('sales_partner', () => {
-              return {
-                filters: {
-                  partner_name: ['in', sales_partners]
-                }
-              }
-            })
-            frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
-            frm.refresh_field('sales_partner')
-          } else if (doc.customer_group_source != 'Is Agency') {
-            frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
-            frm.refresh_field('sales_partner')
-          }
-        })
-    }
+    make_sales_partner_mandatory_based_on_is_agency(frm)
   } ,
   // validate:function (frm) {
 	// 	for (let row of (frm.doc.items || [])) {
@@ -79,6 +58,34 @@ frappe.ui.form.on(cur_frm.doctype, {
 	// 	}    
   // }
 })
+
+function make_sales_partner_mandatory_based_on_is_agency(frm){
+  if (frm.doc.customer_group ) {
+    let sales_partners = []
+  let customer_group_value = frm.doc.customer_group
+  frappe.db.get_doc('Customer Group', customer_group_value)
+    .then(doc => {
+      if (doc.customer_group_source == 'Is Agency') {
+        $.each(doc.sales_partners_cf, function (index, source_row) {
+          sales_partners.push(source_row.sales_partner)
+        });
+        frm.set_query('sales_partner', () => {
+          return {
+            filters: {
+              partner_name: ['in', sales_partners]
+            }
+          }
+        })
+        frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
+        frm.refresh_field('sales_partner')
+      } else if (doc.customer_group_source != 'Is Agency') {
+        frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
+        frm.refresh_field('sales_partner')
+      }
+    })
+}
+}
+
 function filter_source_based_on_customer(frm){
   frappe.db.get_value('Customer', frm.doc.customer, 'customer_group')
   .then(r => {

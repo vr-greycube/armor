@@ -13,32 +13,32 @@ frappe.ui.form.on('Lead', {
       , __('Create'));
 		}    
   },
-  guest_group_cf:function (frm) {
-    if (frm.doc.guest_group_cf ) {
-      let sales_partners = []
-    let customer_group_value = frm.doc.guest_group_cf
-    frappe.db.get_doc('Customer Group', customer_group_value)
-      .then(doc => {
-        if (doc.customer_group_source == 'Is Agency') {
-          $.each(doc.sales_partners_cf, function (index, source_row) {
-            sales_partners.push(source_row.sales_partner)
-          });
-          frm.set_query('sales_partner', () => {
-            return {
-              filters: {
-                partner_name: ['in', sales_partners]
-              }
-            }
-          })
-          frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
-          frm.refresh_field('sales_partner')
-        } else if (doc.customer_group_source != 'Is Agency') {
-          frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
-          frm.refresh_field('sales_partner')
-        }
-      })
-  }    
-  },
+  // guest_group_cf:function (frm) {
+  //   if (frm.doc.guest_group_cf ) {
+  //     let sales_partners = []
+  //   let customer_group_value = frm.doc.guest_group_cf
+  //   frappe.db.get_doc('Customer Group', customer_group_value)
+  //     .then(doc => {
+  //       if (doc.customer_group_source == 'Is Agency') {
+  //         $.each(doc.sales_partners_cf, function (index, source_row) {
+  //           sales_partners.push(source_row.sales_partner)
+  //         });
+  //         frm.set_query('sales_partner', () => {
+  //           return {
+  //             filters: {
+  //               partner_name: ['in', sales_partners]
+  //             }
+  //           }
+  //         })
+  //         frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
+  //         frm.refresh_field('sales_partner')
+  //       } else if (doc.customer_group_source != 'Is Agency') {
+  //         frm.toggle_reqd('sales_partner', doc.customer_group_source == 'Is Agency'?1:0);
+  //         frm.refresh_field('sales_partner')
+  //       }
+  //     })
+  // }    
+  // },
   // validate:function (frm) {
   //   if (frm.doc.email_id==undefined || frm.doc.email_id=='') {
   //     frappe.throw({message:__("Email id is mandatory."),title:__("Email id is missing." )})
@@ -84,31 +84,7 @@ function  create_sales_order(frm) {
   if (frm.doc.email_id==undefined || frm.doc.email_id=='') {
     frappe.throw({message:__("Email id is mandatory for Sales Order Creation."),title:__("Email id is missing." )})
   }   
-  else if (frm.doc.guest_group_cf && frm.doc.sales_partner==undefined) {
-    let sales_partners = []
-  let customer_group_value = frm.doc.guest_group_cf
-  frappe.db.get_doc('Customer Group', customer_group_value)
-    .then(doc => {
-      if (doc.customer_group_source == 'Is Agency') {
-        $.each(doc.sales_partners_cf, function (index, source_row) {
-          sales_partners.push(source_row.sales_partner)
-        });
-        frm.set_query('sales_partner', () => {
-          return {
-            filters: {
-              partner_name: ['in', sales_partners]
-            }
-          }
-        })
-        frappe.throw({message:__("Sales partner is mandatory for Sales Order creation when group source is agency."),title:__("Sales partner is missing." )})
-      } else if (doc.customer_group_source != 'Is Agency') {
-        frappe.model.open_mapped_doc({
-          method: "armor.api.create_sales_order_and_customer",
-          frm: cur_frm
-        })       
-      }
-    })
-} else{
+else{
   frappe.model.open_mapped_doc({
     method: "armor.api.create_sales_order_and_customer",
     frm: cur_frm
