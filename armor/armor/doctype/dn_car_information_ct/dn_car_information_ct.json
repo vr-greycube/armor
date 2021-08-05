@@ -20,7 +20,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Group",
-   "options": "Car Group CT"
+   "options": "Car Group CT",
+   "reqd": 1
   },
   {
    "columns": 2,
@@ -28,7 +29,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Model",
-   "options": "Car Model CT"
+   "options": "Car Model CT",
+   "reqd": 1
   },
   {
    "fieldname": "size",
@@ -55,7 +57,8 @@
    "fieldname": "color",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Color"
+   "label": "Color",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -63,7 +66,8 @@
    "fieldname": "km",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "KM"
+   "label": "KM",
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -71,11 +75,12 @@
    "fieldname": "plate_no",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Plate#"
+   "label": "Plate#",
+   "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2021-08-05 07:48:57.981004",
+ "modified": "2021-08-05 12:31:31.952883",
  "modified_by": "Administrator",
  "module": "Armor",
  "name": "DN Car Information CT",
