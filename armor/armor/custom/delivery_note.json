@@ -459,7 +459,7 @@
    "modified_by": "Administrator",
    "name": "Delivery Note-cars",
    "no_copy": 0,
-   "options": "DN Car Information CT",
+   "options": "Car Information CT",
    "owner": "Administrator",
    "parent": null,
    "parentfield": null,
