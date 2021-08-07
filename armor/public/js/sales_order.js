@@ -12,7 +12,7 @@ weekday[5] = "الجمعة";
 weekday[6] = "لسبت";
 
 
-frappe.ui.form.on(cur_frm.doctype, {
+frappe.ui.form.on('Sales Order', {
   delivery_date: function (frm) {
     if (frm.doc.delivery_date) {
       let delivery_date=frm.doc.delivery_date
@@ -21,27 +21,17 @@ frappe.ui.form.on(cur_frm.doctype, {
       
     }
   },
+  onload_post_render(frm){
+    if(frm.doc.__islocal && !(frm.doc.taxes || []).length && (frm.doc.__onload ? frm.doc.__onload.load_after_mapping : false)) {
+    frappe.after_ajax(() => apply_default_taxes_cs(frm));
+  }  
+  },
   onload: function (frm) {
     if (frm.doc.customer) {
       filter_source_based_on_customer(frm)
       make_sales_partner_mandatory_based_on_is_agency(frm)
-    }    
+    }
   },
-  onload_post_render(frm) {
-		if(frm.doc.__islocal && !(frm.doc.taxes || []).length
-			&& !(frm.doc.__onload ? frm.doc.__onload.load_after_mapping : false)) {
-			frappe.after_ajax(() => frm.cscript.apply_default_taxes());
-      
-		} 
-    else if(frm.doc.__islocal && frm.doc.company && frm.doc["items"]
-			&& !frm.doc.is_pos) {
-			frappe.after_ajax(() => frm.cscript.calculate_taxes_and_totals());
-		}
-		if(frappe.meta.get_docfield(frm.doc.doctype + " Item", "item_code")) {
-			frm.cscript.setup_item_selector();
-			frm.get_field("items").grid.set_multiple_add("item_code", "qty");
-		}
-	},
   customer: function (frm) {
     if (frm.doc.customer) {
       filter_source_based_on_customer(frm)
@@ -106,4 +96,44 @@ function filter_source_based_on_customer(frm){
         })            
     }
   })  
+}
+
+
+function apply_default_taxes_cs(frm) {
+  var taxes_and_charges_field = frappe.meta.get_docfield(frm.doc.doctype, "taxes_and_charges",
+    frm.doc.name);
+  if (frm.doc.taxes && frm.doc.taxes.length > 0 && frm.doc.taxes_and_charges) {
+    return;
+  }
+  if (taxes_and_charges_field) {
+    return frappe.call({
+      method: "erpnext.controllers.accounts_controller.get_default_taxes_and_charges",
+      args: {
+        "master_doctype": taxes_and_charges_field.options,
+        "tax_template": frm.doc.taxes_and_charges,
+        "company": frm.doc.company
+      },
+      callback: function (r) {
+        console.log('r', r)
+        if (!r.exc && r.message) {
+          frappe.run_serially([
+            () => {
+              // directly set in doc, so as not to call triggers
+              if (r.message.taxes_and_charges) {
+                frm.doc.taxes_and_charges = r.message.taxes_and_charges;
+              }
+
+              // set taxes table
+              if (r.message.taxes) {
+
+                frm.set_value("taxes", r.message.taxes);
+              }
+            },
+            () => cur_frm.cscript.set_dynamic_labels(),
+            () => cur_frm.cscript.calculate_taxes_and_totals()
+          ]);
+        }
+      }
+    });
+  }
 }
