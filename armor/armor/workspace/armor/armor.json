@@ -1,5 +1,5 @@
 {
- "cards_label": "Armor",
+ "cards_label": "Armor13",
  "category": "Modules",
  "charts": [],
  "creation": "2022-01-18 09:10:07.418080",
@@ -63,9 +63,18 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Delivery Note",
+   "link_to": "Delivery Note",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Car Setup",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
   },
   {
    "hidden": 0,
@@ -106,11 +115,27 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Package Setup",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Package",
    "link_to": "Package CT",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Quotation Setup",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
   },
   {
    "hidden": 0,
@@ -131,7 +156,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-01-18 09:18:01.347222",
+ "modified": "2022-01-18 14:53:44.674817",
  "modified_by": "Administrator",
  "module": "Armor",
  "name": "Armor",
